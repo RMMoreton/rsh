@@ -13,3 +13,7 @@ The shell should tokenize input on spaces.
 ## Step 3
 
 If the first token is "exit", we should exit the shell no matter what.
+
+## Step 4
+
+The shell should fork and exec commands other than "exit".
