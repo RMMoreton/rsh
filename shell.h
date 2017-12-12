@@ -1,0 +1,4 @@
+#ifndef RMORETON_SIMPLE_SHELL
+#define RMORETON_SIMPLE_SHELL
+
+#endif
