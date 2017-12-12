@@ -72,17 +72,24 @@ void evaluate(char line[SHELL_MAX_LINE_LENGTH])
 {
     // Declare variables.
     char *tokens[SHELL_MAX_LINE_LENGTH];
-    int num_tokens;
+    char *command;
 
     // Strip the newline from the line.
     strip_newline(line);
 
     // Tokenize the line.
-    num_tokens = tokenize(line, tokens, SHELL_MAX_LINE_LENGTH - 1);
+    tokenize(line, tokens, SHELL_MAX_LINE_LENGTH - 1);
 
-    // Print the tokens.
-    for(int i=0; i < num_tokens; i++) {
-        printf("token: %s\n", tokens[i]);
+    // Switch on the first token (allows for shell commands).
+    command = tokens[0];
+    if(NULL == command) {
+        // Do nothing.
+    } else if(!strcmp(command, "exit")) {
+        // Close the shell. Don't print "exit".
+        close_shell(0, 0);
+    } else {
+        // Print the command.
+        fprintf(stdout, "%s\n", command);
     }
 }
 
