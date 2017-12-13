@@ -17,3 +17,7 @@ If the first token is "exit", we should exit the shell no matter what.
 ## Step 4
 
 The shell should fork and exec commands other than "exit".
+
+## Step 5
+
+Break out string functions to their own file.
