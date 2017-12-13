@@ -7,22 +7,6 @@
 #include "shell_string.h"
 
 /*
- * Replace the first occurence of a newline character with a null character.
- *
- * Line must be null terminated!
- */
-void strip_newline(char *line)
-{
-    while(1) {
-        if(*line == '\0' || *line == '\n') {
-            *line = '\0';
-            return;
-        }
-        line++;
-    }
-}
-
-/*
  * Tokenize a line by spaces (ignore quotes).
  *
  * max_tokens must be > 0
@@ -44,11 +28,11 @@ int tokenize(char *line, char **tokens, int max_tokens)
         // Don't tokenize too much! If the string can't be fully tokenized,
         // we just drop the end. That's not great.
         // TODO don't just drop the end of the string.
-        if(i >= max_tokens-1) {
+        if(i >= max_tokens) {
             break;
         }
         // Get a new token. Break if it's NULL.
-        tokens[i] = strtok_r(line, ' ', &saveptr);
+        tokens[i] = shell_strtok_r(line, ' ', &saveptr);
         if(tokens[i] == NULL) {
             break;
         }
@@ -61,10 +45,10 @@ int tokenize(char *line, char **tokens, int max_tokens)
 /*
  * Get a token from a string.
  *
- * This changes first argument!
+ * This changes the first argument!
  * The line must be null-terminated!
  */
-char *strtok_r(char *line, char delim, char **saveptr)
+char *shell_strtok_r(char *line, char delim, char **saveptr)
 {
     // Declare variables.
     char *start;

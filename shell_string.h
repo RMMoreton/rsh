@@ -4,8 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
-void strip_newline(char *);
 int tokenize(char *, char **, int);
-char *strtok_r(char *, char, char **);
+char *shell_strtok_r(char *, char, char **);
 
 #endif

@@ -54,13 +54,16 @@ void evaluate(char line[SHELL_MAX_LINE_LENGTH])
     // Declare variables.
     char *tokens[SHELL_MAX_LINE_LENGTH];
     char *command;
+    char *saveptr;
+    char *tokenized_line;
     int numtokens;
 
-    // Strip the newline from the end.
-    strip_newline(line);
+    // All I care about is the stuff before the first newline character.
+    // TODO care about stuff after the first newline character?
+    tokenized_line = shell_strtok_r(line, '\n', &saveptr);
 
     // Tokenize the line.
-    numtokens = tokenize(line, tokens, SHELL_MAX_LINE_LENGTH - 1);
+    numtokens = tokenize(tokenized_line, tokens, SHELL_MAX_LINE_LENGTH - 1);
 
     // Set tokens[numtokens+1] to NULL to terminate the sequence.
     tokens[numtokens+1] = NULL;
