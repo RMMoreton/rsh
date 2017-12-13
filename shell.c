@@ -6,27 +6,18 @@
 
 #include "shell.h"
 
+/*
+ * Call the repl function.
+ *
+ * TODO add configuration options
+ */
 int main()
 {
     repl();
 }
 
 /*
- * Print the character values of everything up the the null char.
- */
-void printchars(char *line)
-{
-    for(int i = 0; ; i++) {
-        if(line[i] == '\0') {
-            printf("NULLCHAR\n");
-            return;
-        }
-        printf("%d ", (int)line[i]);
-    }
-}
-
-/*
- * Read, evaluate, and print. This is the basic functionality.
+ * Read a line, evaluate it, loop.
  */
 void repl()
 {
@@ -48,7 +39,7 @@ void repl()
         readerr = fgets(line, SHELL_MAX_LINE_LENGTH, stdin);
         if(NULL == readerr) {
             // Assume EOF.
-            // TODO how do I tell if this is an error?
+            // TODO how do I tell if this is an error vs EOF?
             close_shell(1, 0);
         }
 
@@ -73,21 +64,26 @@ void evaluate(char line[SHELL_MAX_LINE_LENGTH])
     // Declare variables.
     char *tokens[SHELL_MAX_LINE_LENGTH];
     char *command;
+    int numtokens;
 
-    // Strip the newline from the line.
+    // Strip the newline from the end.
     strip_newline(line);
 
     // Tokenize the line.
-    tokenize(line, tokens, SHELL_MAX_LINE_LENGTH - 1);
+    numtokens = tokenize(line, tokens, SHELL_MAX_LINE_LENGTH - 1);
 
-    // Switch on the first token (allows for shell commands).
+    // Set tokens[numtokens+1] to NULL to terminate the sequence.
+    tokens[numtokens+1] = NULL;
+
+    // Switch on the first token.
     command = tokens[0];
     if(NULL == command) {
         // Do nothing.
-    } else if(!strcmp(command, "exit")) {
+    } else if(0 == strcmp(command, "exit")) {
         // Close the shell. Don't print "exit".
         close_shell(0, 0);
     } else {
+        // Attempt to execute the command.
         execute_command(tokens);
     }
 }
