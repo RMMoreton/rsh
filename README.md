@@ -21,3 +21,7 @@ The shell should fork and exec commands other than "exit".
 ## Step 5
 
 Break out string functions to their own file.
+
+## Step 6
+
+Make the string functions better.
