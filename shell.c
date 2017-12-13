@@ -88,8 +88,7 @@ void evaluate(char line[SHELL_MAX_LINE_LENGTH])
         // Close the shell. Don't print "exit".
         close_shell(0, 0);
     } else {
-        // Print the command.
-        fprintf(stdout, "%s\n", command);
+        execute_command(tokens);
     }
 }
 
@@ -208,6 +207,36 @@ char *strtok_r(char *line, char delim, char **saveptr)
     return start;
 }
 
+/*
+ * Execute a command in the shell.
+ */
+void execute_command(char **tokens)
+{
+    // Declare variables.
+    pid_t child_pid;
+    int status;
+
+    // Fork.
+    child_pid = fork();
+
+    // Error check.
+    if(child_pid < 0) {
+        perror("execute_command");
+        return;
+    }
+
+    if(child_pid) {
+        // If we're the parent, wait on the child.
+        waitpid(child_pid, &status, 0);
+        return;
+    } else {
+        // If we're the child, execute the command.
+        status = execvp(tokens[0], tokens);
+        // Error! Print the error and exit this shell.
+        perror(tokens[0]);
+        close_shell(0, status);
+    }
+}
 
 /*
  * Close the shell.
