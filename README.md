@@ -25,3 +25,7 @@ Break out string functions to their own file.
 ## Step 6
 
 Make the string functions better.
+
+## Step 7
+
+Allow for redirecting output via ">".
