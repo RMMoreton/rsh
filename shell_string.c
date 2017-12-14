@@ -104,3 +104,40 @@ char *shell_strtok_r(char *line, char delim, char **saveptr)
     // Return the start of the token.
     return start;
 }
+
+/*
+ * strip_whitespace strips leading and trailing whitespace from a character
+ * array.
+ *
+ * This changes the first argument!
+ * The array must be null terminated!
+ */
+char *strip_whitespace(char *line)
+{
+    // Declare variables.
+    char *end;
+
+    // Move line up until it points to non-whitespace (i.e. space, tab,
+    // newline).
+    while(*line == ' ' || *line == '\t' || *line == '\n') {
+        ++line;
+    }
+
+    // Move end to the end of the string.
+    end = line;
+    while(*end != '\0') {
+        ++end;
+    }
+    
+    // Move end back to the first non-whitespace character.
+    while(end > line && (*end == ' '
+                || *end == '\t'
+                || *end == '\n'
+                || *end == '\0')) {
+        *(end--) = '\0';
+    }
+
+    // Return start. It points to a null-terminated string with no leading
+    // or trailing whitespace.
+    return line;
+}

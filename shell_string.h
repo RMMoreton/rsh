@@ -6,5 +6,6 @@
 
 int tokenize(char *, char **, int);
 char *shell_strtok_r(char *, char, char **);
+char *strip_whitespace(char *);
 
 #endif
