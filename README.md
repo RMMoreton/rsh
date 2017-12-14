@@ -28,4 +28,4 @@ Make the string functions better.
 
 ## Step 7
 
-Allow for redirecting output via ">".
+Add string function to strip leading and trailing whitespace.
