@@ -7,6 +7,98 @@
 #include "shell_string.h"
 
 /*
+ * Checks if a string contains a character.
+ *
+ * The string must be null termianted!
+ */
+int str_contains(char *str, char c)
+{
+    // Loop over the string until the null terminator, checking for c.
+    while('\0' != *str) {
+        if(c == *(str++)) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+/*
+ * Get a line of arbitrary length, resizing the array as necessary.
+ *
+ * The calling function must free the returned pointer!
+ */
+char *get_line(void)
+{
+    // Declare variables.
+    char *line;
+    char *readerr;
+    int len = DEFAULT_SHELL_LINE_LENGTH;
+    int used_len = 0;
+
+    // Do an initial malloc for the line.
+    line = (char *)malloc(len * sizeof(char));
+    if(NULL == line) {
+        fprintf(stderr, "could not malloc for input line");
+        return NULL;
+    }
+
+    // Loop until we've finished reading the line.
+    while(1) {
+        // Read in some stuff.
+        readerr = fgets(line+used_len, len-used_len, stdin);
+        if(NULL == readerr) {
+            // We read in EOF, or we got an error. Return null I guess?
+            free(line);
+            return NULL;
+        }
+
+        // Check if it contains a newline. If so, we're done!
+        if(str_contains(line, '\n')) {
+            return line;
+        }
+
+        // Get a new array that's bigger than the last one.
+        used_len = len - 1;
+        reallocate_str(&line, &len);
+        if(line == NULL) {
+            fprintf(stderr, "could not malloc enough space for input line\n");
+            return NULL;
+        }
+    }
+}
+
+/*
+ * Malloc a new array of size 2*len, copy line into it, and free line.
+ */
+void reallocate_str(char **line_ptr, int *len)
+{
+    // Declare variables.
+    char *new_line;
+    int old_len = *len;
+
+    // Double the line length here and in the calling function.
+    *len = *len * 2;
+
+    // Malloc the new array.
+    new_line = (char *)malloc(*len * sizeof(char));
+    if(NULL == new_line) {
+        free(*line_ptr); // A partial line is useless - throw it all out.
+        *line_ptr = NULL;
+        return;
+    }
+
+    // Copy line into new_line.
+    for(int i = 0; i < old_len; i++) {
+        new_line[i] = (*line_ptr)[i];
+    }
+
+    // Clean up and return.
+    free(*line_ptr);
+    *line_ptr = new_line;
+    return;
+}
+
+/*
  * Tokenize a line by spaces (ignore quotes).
  *
  * max_tokens must be > 0

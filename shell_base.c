@@ -12,22 +12,21 @@
 void repl()
 {
     // Declare variables.
-    char line[SHELL_MAX_LINE_LENGTH];
-    char *readerr;
+    char *line = NULL;
 
     // Loop forever!
     while(1) {
-        // Zero out the line. Slow, but...worth it maybe?
-        for(int i = 0; i < SHELL_MAX_LINE_LENGTH; i++) {
-            line[i] = '\0';
+        // If line is not null, free it.
+        if(NULL != line) {
+            free(line);
         }
 
         // Print the prompt.
         show_prompt();
 
         // Read a line.
-        readerr = fgets(line, SHELL_MAX_LINE_LENGTH, stdin);
-        if(NULL == readerr) {
+        line = get_line();
+        if(NULL == line) {
             // Assume EOF.
             // TODO how do I tell if this is an error vs EOF?
             close_shell(1, 0);
@@ -52,7 +51,7 @@ void show_prompt(void)
 void evaluate(char *line)
 {
     // Declare variables.
-    char *tokens[SHELL_MAX_LINE_LENGTH];
+    char *tokens[DEFAULT_SHELL_LINE_LENGTH];
     char *command;
     int numtokens;
 
@@ -61,7 +60,7 @@ void evaluate(char *line)
     line = strip_whitespace(line);
 
     // Tokenize the line.
-    numtokens = tokenize(line, tokens, SHELL_MAX_LINE_LENGTH - 1);
+    numtokens = tokenize(line, tokens, DEFAULT_SHELL_LINE_LENGTH - 1);
 
     // Set tokens[numtokens+1] to NULL to terminate the sequence.
     tokens[numtokens+1] = NULL;
@@ -72,6 +71,7 @@ void evaluate(char *line)
         // Do nothing.
     } else if(0 == strcmp(command, "exit")) {
         // Close the shell. Don't print "exit".
+        free(line);
         close_shell(0, 0);
     } else {
         // Attempt to execute the command.
