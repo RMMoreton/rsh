@@ -29,3 +29,7 @@ Make the string functions better.
 ## Step 7
 
 Add string function to strip leading and trailing whitespace.
+
+## Step 8
+
+Allow for arbitrary line lengths.
