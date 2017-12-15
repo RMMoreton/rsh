@@ -33,3 +33,7 @@ Add string function to strip leading and trailing whitespace.
 ## Step 8
 
 Allow for arbitrary line lengths.
+
+## Step 9
+
+Allow for an arbitrary number of tokens on a line.
