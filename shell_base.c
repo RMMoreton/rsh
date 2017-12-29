@@ -7,6 +7,14 @@
 #include "shell_base.h"
 
 /*
+ * The main entrypoint of the shell. Right now we just call the REPL method.
+ */
+int main()
+{
+    repl();
+}
+
+/*
  * Read a line, evaluate it, loop.
  */
 void repl()
