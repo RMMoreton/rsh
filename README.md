@@ -37,3 +37,7 @@ Allow for arbitrary line lengths.
 ## Step 9
 
 Allow for an arbitrary number of tokens on a line.
+
+## Step 10
+
+Create a better tokenizer.

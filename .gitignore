@@ -2,3 +2,5 @@
 *.o
 *.dSYM
 rsh
+tokenizer/Makefile
+tokenizer/tokenizer
